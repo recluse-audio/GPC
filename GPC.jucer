@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="mqA5AT" name="GPC" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
+              pluginManufacturer="Recluse-Audio" pluginManufacturerCode="RECL">
+  <MAINGROUP id="SySF7a" name="GPC">
+    <GROUP id="{1DEB0625-8275-89BE-E442-B5CE52052F2B}" name="Source">
+      <FILE id="FtJ949" name="GPC_Constants.h" compile="0" resource="0" file="Source/GPC_Constants.h"/>
+      <GROUP id="{BE4CA152-96FA-096A-EBE3-A083CB450530}" name="WaveTable">
+        <FILE id="qJXv6h" name="WaveTable.cpp" compile="1" resource="0" file="Source/WaveTable.cpp"/>
+        <FILE id="yFbTha" name="WaveTable.h" compile="0" resource="0" file="Source/WaveTable.h"/>
+        <FILE id="V6hzuN" name="WaveVector.cpp" compile="1" resource="0" file="Source/WaveVector.cpp"/>
+        <FILE id="Z4U9Hg" name="WaveVector.h" compile="0" resource="0" file="Source/WaveVector.h"/>
+      </GROUP>
+      <GROUP id="{F7EC5ACC-99DC-F9D7-DE98-9E344FCED58A}" name="Pitch Detect"/>
+      <GROUP id="{7251ABF4-2D10-BA07-DA4F-F641064E27A2}" name="LooknFeel"/>
+      <GROUP id="{378AFAAA-C9D7-08BA-3DEF-1019A6F0A89B}" name="Synth">
+        <FILE id="hCVApQ" name="GPC_Osc.cpp" compile="1" resource="0" file="Source/GPC_Osc.cpp"/>
+        <FILE id="riZgeX" name="GPC_Osc.h" compile="0" resource="0" file="Source/GPC_Osc.h"/>
+        <FILE id="NknIBR" name="GPC_Sound.h" compile="0" resource="0" file="Source/GPC_Sound.h"/>
+        <FILE id="qAfFAr" name="GPC_Synth.cpp" compile="1" resource="0" file="Source/GPC_Synth.cpp"/>
+        <FILE id="pI9ocn" name="GPC_Synth.h" compile="0" resource="0" file="Source/GPC_Synth.h"/>
+        <FILE id="VOz5cw" name="GPC_Voice.cpp" compile="1" resource="0" file="Source/GPC_Voice.cpp"/>
+        <FILE id="wemH7A" name="GPC_Voice.h" compile="0" resource="0" file="Source/GPC_Voice.h"/>
+      </GROUP>
+      <GROUP id="{DFB8CF4B-AFC7-3ACD-FB14-D67EC2B5EC61}" name="Processor">
+        <FILE id="c7y58R" name="PluginProcessor.cpp" compile="1" resource="0"
+              file="Source/PluginProcessor.cpp"/>
+        <FILE id="HejjZl" name="PluginProcessor.h" compile="0" resource="0"
+              file="Source/PluginProcessor.h"/>
+      </GROUP>
+      <GROUP id="{8497C736-9344-FC36-2575-5E7EAB3B987F}" name="Editor/Components">
+        <FILE id="VecT6w" name="PluginEditor.cpp" compile="1" resource="0"
+              file="Source/PluginEditor.cpp"/>
+        <FILE id="TZtQrT" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      </GROUP>
+      <GROUP id="{2716E40A-B1D4-BDD6-533D-E98F1E99A7D1}" name="Save/Load"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="GPC"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="GPC"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>
