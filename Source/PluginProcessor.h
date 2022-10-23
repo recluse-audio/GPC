@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 
-class GPC_Osc;
+class GPC_Synth;
 //==============================================================================
 /**
 */
@@ -55,7 +55,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-	std::unique_ptr<GPC_Osc> oscillator;
+	std::unique_ptr<GPC_Synth> synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GPCAudioProcessor)
 };

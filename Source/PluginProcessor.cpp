@@ -8,7 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "GPC_Osc.h"
+#include "GPC_Synth.h"
 
 //==============================================================================
 GPCAudioProcessor::GPCAudioProcessor()
@@ -23,7 +23,7 @@ GPCAudioProcessor::GPCAudioProcessor()
                        )
 #endif
 {
-	oscillator = std::make_unique<GPC_Osc>();
+	synth = std::make_unique<GPC_Synth>();
 }
 
 GPCAudioProcessor::~GPCAudioProcessor()
@@ -95,14 +95,13 @@ void GPCAudioProcessor::changeProgramName (int index, const juce::String& newNam
 //==============================================================================
 void GPCAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-	oscillator->prepareToPlay(sampleRate);
-	oscillator->setFrequency(600.f);
+	juce::dsp::ProcessSpec spec{ sampleRate, (juce::uint32)samplesPerBlock, 2 };
+	synth->prepare(spec);
 }
 
 void GPCAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -112,10 +111,7 @@ bool GPCAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) cons
     juce::ignoreUnused (layouts);
     return true;
   #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
+
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
@@ -140,17 +136,7 @@ void GPCAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-	auto buffWrite =  buffer.getArrayOfWritePointers();
-	for(int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); ++sampleIndex)
-	{
-		float oscSample = oscillator->getNextSample();
- 		oscSample *= 0.5f;
-		
-		for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-		{
-			buffWrite[channel][sampleIndex] = oscSample;
-		}
-	}
+	synth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 
