@@ -16,6 +16,7 @@ GPC_Voice::GPC_Voice()
 {
 	oscillator = std::make_unique<GPC_Osc>();
 	env = std::make_unique<juce::ADSR>();
+	
 }
 
 //======================
@@ -40,8 +41,6 @@ void GPC_Voice::noteStarted()
 	
 	oscillator->setFrequency(freqHz);
 	
-	juce::ADSR::Parameters envParam { 0.01f, 0.1f, velocity, 0.2f };
-	env->setParameters(envParam);
 	env->noteOn();
 }
 
@@ -95,6 +94,20 @@ void GPC_Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int star
 			buffWrite[channel][sampleIndex] += oscSample;
 		}
 	}
+}
+
+//=========================
+void GPC_Voice::updateAPVTS(juce::AudioProcessorValueTreeState &apvts)
+{
+	// Assign Env params (in voice class)
+	auto atk1 = apvts.getRawParameterValue("ATTACK 1")->load();
+	auto dec1 = apvts.getRawParameterValue("DECAY 1")->load();
+	auto sus1 = apvts.getRawParameterValue("SUSTAIN 1")->load();
+	auto rel1 = apvts.getRawParameterValue("RELEASE 1")->load();
+	
+	juce::ADSR::Parameters newParameters { atk1, dec1, sus1, rel1 };
+	
+	env->setParameters(newParameters);
 }
 
 

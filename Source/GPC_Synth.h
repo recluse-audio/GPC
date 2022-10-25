@@ -18,6 +18,7 @@ public:
 	~GPC_Synth();
 	
 	void prepare(juce::dsp::ProcessSpec& spec);
+	void updateAPVTS(juce::AudioProcessorValueTreeState& apvts);
 
 private:
 	void _initVoices(int numVoices);

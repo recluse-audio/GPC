@@ -20,14 +20,16 @@ GPCAudioProcessor::GPCAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts(*this, nullptr, "Parameters", _createParameters())
 #endif
 {
 	synth = std::make_unique<GPC_Synth>();
+	apvts.state.addListener(this);
 }
 
 GPCAudioProcessor::~GPCAudioProcessor()
 {
+	apvts.state.removeListener(this);
 }
 
 //==============================================================================
@@ -97,6 +99,7 @@ void GPCAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
 	juce::dsp::ProcessSpec spec{ sampleRate, (juce::uint32)samplesPerBlock, 2 };
 	synth->prepare(spec);
+	updateAPVTS();
 }
 
 void GPCAudioProcessor::releaseResources()
@@ -127,6 +130,7 @@ bool GPCAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) cons
 }
 #endif
 
+//==================================
 void GPCAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
@@ -136,6 +140,9 @@ void GPCAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+	if(mustUpdateAPVTS.get())
+		updateAPVTS();
+	
 	synth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
@@ -170,4 +177,39 @@ void GPCAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new GPCAudioProcessor();
+}
+
+//=====================================================
+void GPCAudioProcessor::updateAPVTS()
+{
+	synth->updateAPVTS(apvts);
+	mustUpdateAPVTS = false;
+}
+
+//=====================================================
+juce::AudioProcessorValueTreeState& GPCAudioProcessor::getValueTree()
+{
+	return apvts;
+}
+
+
+//=====================================================
+juce::AudioProcessorValueTreeState::ParameterLayout GPCAudioProcessor::_createParameters()
+{
+	std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+	
+	// ADSR Params for envelope1.  ADR in seconds, Sustain in gain 0.f-1.
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK 1", "Attack 1", juce::NormalisableRange<float>(0.0f, 3.0f, 0.01f, 0.5f), 2.5f));
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY 1", "Decay 1", juce::NormalisableRange<float>(0.0f, 1.0f, 0.01, 0.5f), 0.2f));
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN 1", "Sustain 1", juce::NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.8f));
+	params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE 1", "Release 1", juce::NormalisableRange<float>(0.0f, 3.0f, 0.01f, 0.5f), 2.5f));
+	
+	return { params.begin(), params.end() };
+}
+
+
+//=====================================
+void GPCAudioProcessor::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
+{
+	mustUpdateAPVTS = true;
 }

@@ -50,3 +50,16 @@ void GPC_Synth::_initVoices(int numVoices)
 	setVoiceStealingEnabled(true);
 
 }
+
+//======================
+void GPC_Synth::updateAPVTS(juce::AudioProcessorValueTreeState& apvts)
+{
+	for(size_t i = 0; i < getNumVoices(); ++i)
+	{
+		if (auto* voice = dynamic_cast<GPC_Voice*>(getVoice(i)))
+		{
+			voice->updateAPVTS(apvts);
+		}
+	}
+
+}

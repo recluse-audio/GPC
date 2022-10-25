@@ -31,7 +31,9 @@ public:
 	void noteKeyStateChanged() override ;
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
+	void updateAPVTS(juce::AudioProcessorValueTreeState& apvts);
 private:
 	std::unique_ptr<GPC_Osc> oscillator;
 	std::unique_ptr<juce::ADSR> env;
+	
 };

@@ -14,7 +14,8 @@ class GPC_Synth;
 //==============================================================================
 /**
 */
-class GPCAudioProcessor  : public juce::AudioProcessor
+class GPCAudioProcessor  :  public juce::AudioProcessor,
+							public juce::ValueTree::Listener
 {
 public:
     //==============================================================================
@@ -54,8 +55,19 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+	void updateAPVTS();
+	juce::AudioProcessorValueTreeState& getValueTree();
+	
 private:
 	std::unique_ptr<GPC_Synth> synth;
+	
+	juce::AudioProcessorValueTreeState apvts;
+	juce::Atomic<bool> mustUpdateAPVTS{ false };
+	juce::AudioProcessorValueTreeState::ParameterLayout _createParameters();
+	
+	void valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property) override;
+
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GPCAudioProcessor)
 };
